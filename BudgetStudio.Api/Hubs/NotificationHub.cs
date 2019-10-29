@@ -24,5 +24,15 @@ namespace BudgetStudio.Api.Hubs
 
 			await _mediator.Send(new RecalculateBudgetCostCommand(budgetId));
 		}
+
+		public async Task ConfirmBudget(Guid budgetId)
+		{
+			await Clients.All.SendAsync(
+				"SendNotification",
+				"Budget confirmation started",
+				new { budgetId });
+
+			//TODO: send command to complete the process
+		}
 	}
 }

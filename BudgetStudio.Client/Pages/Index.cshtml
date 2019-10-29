@@ -6,8 +6,9 @@
 
 <div class="text-center">
 	<span>Re-calculate budget:</span>
-	<input id="inLastBudgetId" type="text"/>
-	<input id="btnRecalculateBudget" type="button" value="Send"/>
+	<input id="inLastBudgetId" type="text" />
+	<input id="btnRecalculateBudget" type="button" value="Send" />
+	<input id="btnConfirmBudget" type="button" value="Confirm" />
 </div>
 <div class="text-center">
 	<h1 class="display-4">Notifications</h1>
@@ -18,6 +19,7 @@
 {
 	<script type="text/javascript">
 		document.getElementById("btnRecalculateBudget").disabled = true;
+		document.getElementById("btnConfirmBudget").disabled = true;
 
 		document.addEventListener('DOMContentLoaded',
 			function() {
@@ -49,15 +51,16 @@
 					.then(function() {
 						console.log('connection started');
 						document.getElementById('btnRecalculateBudget').disabled = false;
+						document.getElementById('btnConfirmBudget').disabled = false;
 					})
 					.catch(error => {
 						console.error(error.message);
 					});
 
-				document.getElementById('btnRecalculateBudget').addEventListener('click',
+				document.getElementById('btnConfirmBudget').addEventListener('click',
 					function(event) {
 						var budgetId = document.getElementById("inLastBudgetId").value;
-						connection.invoke('RecalculateBudget', budgetId).catch(function(err) {
+						connection.invoke('ConfirmBudget', budgetId).catch(function(err) {
 							return console.error(err.toString());
 						});
 						event.preventDefault();

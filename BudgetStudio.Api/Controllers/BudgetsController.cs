@@ -46,5 +46,14 @@ namespace BudgetStudio.Api.Controllers
 
 			return AcceptedAtAction(nameof(GetBudget), new { id = budgetId }, new { budgetId });
 		}
+
+		[HttpPost("{budgetId}/extracosts")]
+		public async Task<IActionResult> AddExtraCost(Guid budgetId, AddExtraCostModel model)
+		{
+			// TODO: complete command
+			await Task.CompletedTask;
+
+			return AcceptedAtAction(nameof(GetBudget), new { id = budgetId }, new { budgetId });
+		}
 	}
 }

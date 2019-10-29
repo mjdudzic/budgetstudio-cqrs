@@ -32,5 +32,14 @@ namespace BudgetStudio.Api.Controllers
 
 			return Ok(result);
 		}
+
+		[HttpGet("extracosts")]
+		public async Task<IActionResult> GetExtraCosts()
+		{
+			// TODO: complete query
+			await Task.CompletedTask;
+
+			return Ok();
+		}
 	}
 }

@@ -57,6 +57,15 @@
 						console.error(error.message);
 					});
 
+				document.getElementById('btnRecalculateBudget').addEventListener('click',
+					function (event) {
+						var budgetId = document.getElementById("inLastBudgetId").value;
+						connection.invoke('RecalculateBudget', budgetId).catch(function (err) {
+							return console.error(err.toString());
+						});
+						event.preventDefault();
+					});
+
 				document.getElementById('btnConfirmBudget').addEventListener('click',
 					function(event) {
 						var budgetId = document.getElementById("inLastBudgetId").value;

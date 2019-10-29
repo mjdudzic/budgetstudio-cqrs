@@ -1,0 +1,67 @@
+﻿@page
+@model IndexModel
+@{
+	ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+	<span>Re-calculate budget:</span>
+	<input id="inLastBudgetId" type="text"/>
+	<input id="btnRecalculateBudget" type="button" value="Send"/>
+</div>
+<div class="text-center">
+	<h1 class="display-4">Notifications</h1>
+	<ul id="notifications" class="text-left"></ul>
+</div>
+
+@section Scripts
+{
+	<script type="text/javascript">
+		document.getElementById("btnRecalculateBudget").disabled = true;
+
+		document.addEventListener('DOMContentLoaded',
+			function() {
+				var connection = new signalR.HubConnectionBuilder()
+					.withUrl('http://localhost:5000/notification')
+					.build();
+
+				connection.on('SendNotification',
+					function(title, budget) {
+						console.log(budget);
+
+						var liElement = document.createElement('li');
+						liElement.innerHTML =
+							'<strong>' + title + '</strong>' + '<br/>Budget ID:&nbsp;' + budget.budgetId;
+
+						if (budget.projectId) {
+							liElement.innerHTML += '<br/>Project ID:&nbsp;' +
+								budget.projectId +
+								'<br/>Total cost:&nbsp;' +
+								budget.totalCostAmount;
+						}
+
+						document.getElementById('notifications').appendChild(liElement);
+
+						document.getElementById('inLastBudgetId').value = budget.budgetId;
+					});
+
+				connection.start()
+					.then(function() {
+						console.log('connection started');
+						document.getElementById('btnRecalculateBudget').disabled = false;
+					})
+					.catch(error => {
+						console.error(error.message);
+					});
+
+				document.getElementById('btnRecalculateBudget').addEventListener('click',
+					function(event) {
+						var budgetId = document.getElementById("inLastBudgetId").value;
+						connection.invoke('RecalculateBudget', budgetId).catch(function(err) {
+							return console.error(err.toString());
+						});
+						event.preventDefault();
+					});
+			});
+	</script>
+}

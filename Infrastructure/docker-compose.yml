@@ -1,0 +1,49 @@
+version: '3.4'
+
+services:
+  postgres:
+    image: postgres:11-alpine
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: test123
+    volumes:
+      - bspgdata:/var/lib/postgresql/data
+    networks:
+      - bsbacktier
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - 27017:27017
+    volumes:
+      - bsmongo:/data/db
+    networks:
+      - bsbacktier
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
+    depends_on:
+      - mongo
+    networks:
+      - bsbacktier
+
+volumes: 
+  bspgdata:
+    driver: local
+  bsmongo:
+    driver: local
+
+networks:
+  bsbacktier:
+    driver: bridge
